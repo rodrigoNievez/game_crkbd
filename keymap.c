@@ -25,17 +25,11 @@ enum layers {
     _ADJUST
 };
 
-enum keycodes {
+enum my_keycodes {
     QWERTY = SAFE_RANGE,
     GAME
 };
 
-
-#define WIN_NUM LT(_NUM, KC_LGUI)
-#define LSFT_ESC LSFT_T(KC_ESC)
-#define RAISE MO(_RAISE)
-#define LOWER MO(_LOWER)
-#define ADJUST MO(_ADJUST)
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -53,10 +47,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
 
     [_QWERTY] = LAYOUT_split_3x6_3(
-        LSFT_ESC, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                     KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC ,
+        LSFT_T(KC_ESC), KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                     KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC ,
         KC_TAB  , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                     KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT  ,
         KC_LCTL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT ,
-                                             KC_LOPT, WIN_NUM, LOWER  ,      RAISE  , KC_SPC , ADJUST 
+                                             KC_LOPT, LT(_NUM, KC_LGUI), MO(_LOWER)  ,      MO(_RAISE)  , KC_SPC , MO(_ADJUST) 
     ),
 
     /* _GAME
@@ -75,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC  , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                     KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC ,
         KC_TAB  , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                     KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT  ,
         KC_LCTL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT ,
-                                            KC_LSFT , KC_SPC , KC_LCTL,        KC_LCTL  , KC_LGUI, ADJUST 
+                                            KC_LSFT , KC_SPC , KC_LCTL,        KC_LCTL  , KC_LGUI, MO(_ADJUST) 
     ),
 
     /* _LOWER
@@ -165,13 +159,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QWERTY:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_QWERTY);
+                rgblight_setrgb(RGB_RED);
             }
             return false;
             break;
         case GAME:
             if (record->event.pressed) {
-                rgblight_setrgb(RGB_WHITE);
                 set_single_persistent_default_layer(_GAME);
+                rgblight_setrgb(RGB_WHITE);
             }
             return false;
             break;
@@ -211,7 +206,6 @@ void oled_render_layer_state(void) {
             break;
     }
 }
-
 
 char keylog_str[24] = {};
 
@@ -270,7 +264,7 @@ bool oled_task_user(void) {
         oled_render_layer_state();
         oled_render_keylog();
     } else {
-        oled_render_logo();
+        //oled_render_logo();
     }
     return false;
 }

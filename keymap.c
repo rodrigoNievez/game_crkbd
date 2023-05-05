@@ -30,6 +30,11 @@ enum my_keycodes {
     GAME
 };
 
+#define ESC_LSFT LSFT_T(KC_ESC)
+#define GUI_NUM LT(_NUM, KC_LGUI)
+#define LOWER MO(_LOWER)
+#define RAISE MO(_RAISE)
+#define ADJUST MO(_ADJUST)
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -47,10 +52,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
 
     [_QWERTY] = LAYOUT_split_3x6_3(
-        LSFT_T(KC_ESC), KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                     KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC ,
+        ESC_LSFT, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                     KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC ,
         KC_TAB  , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                     KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT  ,
         KC_LCTL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT ,
-                                             KC_LOPT, LT(_NUM, KC_LGUI), MO(_LOWER)  ,      MO(_RAISE)  , KC_SPC , MO(_ADJUST) 
+                                             KC_LOPT, GUI_NUM, LOWER  ,       RAISE  , KC_SPC  , ADJUST 
     ),
 
     /* _GAME
@@ -61,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
      * |  LCTL  |    Z   |    X   |    C   |    V   |    B   |                    |     N  |    M   |    ,   |    .   |    -   |   RSFT |
      * |--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-     *                                     |  LSFT  | SAPACE |  LCTL  |  |  RCTL  | KC_LGUI |  RSFT  |
+     *                                     |  LSFT  | SAPACE |  LCTL  |  |  RCTL  |   GUI  |  RSFT  |
      *                                     ----------------------------  ----------------------------
      */
 
@@ -69,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC  , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                     KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC ,
         KC_TAB  , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                     KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT  ,
         KC_LCTL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT ,
-                                            KC_LSFT , KC_SPC , KC_LCTL,        KC_LCTL  , KC_LGUI, MO(_ADJUST) 
+                                            KC_LSFT , KC_SPC , KC_LCTL,        KC_LCTL  , KC_LGUI, ADJUST 
     ),
 
     /* _LOWER
@@ -150,32 +155,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-uint32_t layer_state_set_user(uint32_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case QWERTY:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_QWERTY);
-                rgblight_setrgb(RGB_RED);
-            }
-            return false;
-            break;
-        case GAME:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_GAME);
-                rgblight_setrgb(RGB_WHITE);
-            }
-            return false;
-            break;
-    }
-
-    return true;
-}
-
 #ifdef OLED_ENABLE
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   if (!is_keyboard_master()) {
     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
@@ -185,7 +166,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
 void oled_render_layer_state(void) {
     oled_write_P(PSTR("Layer: "), false);
-    switch (layer_state) {
+    switch (get_highest_layer(layer_state)) {
         case _QWERTY:
             oled_write_ln_P(PSTR("Qwerty"), false);
             break;
@@ -267,5 +248,30 @@ bool oled_task_user(void) {
         //oled_render_logo();
     }
     return false;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        set_keylog(keycode, record);
+    }
+    switch (keycode) {
+        case QWERTY:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_QWERTY);
+                rgblight_setrgb(RGB_RED);
+            }
+            return false;
+            break;
+        case GAME:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_GAME);
+                rgblight_setrgb(RGB_CYAN);
+            }
+            return false;
+            break;
+            
+    }
+
+    return true;
 }
 #endif // OLED_ENABLE

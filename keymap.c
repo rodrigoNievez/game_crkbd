@@ -31,7 +31,7 @@ enum my_keycodes {
 };
 
 #define ESC_LSFT LSFT_T(KC_ESC)
-#define GUI_NUM LT(_NUM, KC_LGUI)
+#define TAB_NUM LT(_NUM, KC_TAB)
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 #define ADJUST MO(_ADJUST)
@@ -43,7 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------|                    |-----------------------------------------------------|
      * |LSF(ESC)|    Q   |    W   |    E   |    R   |    T   |                    |     Y  |    U   |    I   |    O   |    P   |   BSPC |
      * |--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     * |   TAB  |    A   |    S   |    D   |    F   |    G   |                    |     H  |    J   |    K   |    L   |    Ñ   |   ENT  |
+     * | TAB_NUM|    A   |    S   |    D   |    F   |    G   |                    |     H  |    J   |    K   |    L   |    Ñ   |   ENT  |
      * |--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
      * | KC_LCTL|    Z   |    X   |    C   |    V   |    B   |                    |     N  |    M   |    ,   |    .   |    -   |   RSFT |
      * |--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -53,9 +53,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_QWERTY] = LAYOUT_split_3x6_3(
         ESC_LSFT, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                     KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC ,
-        KC_TAB  , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                     KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT  ,
+        TAB_NUM , KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                     KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_ENT  ,
         KC_LCTL , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT ,
-                                             KC_LOPT, GUI_NUM, LOWER  ,       RAISE  , KC_SPC  , ADJUST 
+                                             KC_LOPT, KC_LGUI, LOWER  ,       RAISE  , KC_SPC  , ADJUST 
     ),
 
     /* _GAME

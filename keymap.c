@@ -117,9 +117,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* _NUM
      * |-----------------------------------------------------|                    |-----------------------------------------------------|
-     * |  MUTE  | VOL_DW | VOL_UP |        |        |        |                    |    7   |    8   |    9   |    /   |    *   |   DEL  |
+     * |        |  MUTE  | VOL_DW | VOL_UP |        |        |                    |    7   |    8   |    9   |    /   |    *   |   DEL  |
      * |--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     * | PREV_TR| PL/PSE | NETX_TR|        |        |        |                    |    4   |    5   |    6   |    -   |    +   |   ENT  |
+     * |        |PREV_TR | PL/PSE |NETX_TR |        |        |                    |    4   |    5   |    6   |    -   |    +   |   ENT  |
      * |--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
      * |        |        |        |        |        |        |                    |    1   |    2   |    3   |    0   |    .   |        |
      * |--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -128,8 +128,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
 
     [_NUM] = LAYOUT_split_3x6_3(
-        KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX,                         KC_7    , KC_8   , KC_9   , KC_PSLS, KC_PAST, KC_DEL ,
-        KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX, XXXXXXX,                         KC_4    , KC_5   , KC_6   , KC_PMNS, KC_PPLS, KC_ENT ,
+        XXXXXXX, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, XXXXXXX,                         KC_7    , KC_8   , KC_9   , KC_PSLS, KC_PAST, KC_DEL ,
+        XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,                         KC_4    , KC_5   , KC_6   , KC_PMNS, KC_PPLS, KC_ENT ,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                         KC_1    , KC_2   , KC_3   , KC_0   , KC_PDOT, XXXXXXX,
                                         XXXXXXX, XXXXXXX, XXXXXXX,        XXXXXXX, XXXXXXX, XXXXXXX
     ),
@@ -258,14 +258,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QWERTY:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_QWERTY);
-                rgblight_setrgb(RGB_RED);
             }
             return false;
             break;
         case GAME:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_GAME);
-                rgblight_setrgb(RGB_CYAN);
+                
             }
             return false;
             break;
